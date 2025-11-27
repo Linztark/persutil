@@ -25,8 +25,7 @@ public class SilvestreService {
     ArrayList<String> alUrls = new ArrayList<>();
 
     public SilvestreService() {
-
-        // títulos ejemplo
+        // --- Strings de ejemplo ---
         alTitulos.add("Atardecer en la montaña");
         alTitulos.add("Bosque encantado");
         alTitulos.add("Río cristalino");
@@ -48,25 +47,23 @@ public class SilvestreService {
         alTitulos.add("Luz entre árboles");
         alTitulos.add("Vista panorámica");
 
-        // descripciones ejemplo
-        alDescripciones.add("Imagen tomada en primavera.");
-        alDescripciones.add("Lugar aislado, poca luz.");
-        alDescripciones.add("Captura con luz dorada.");
-        alDescripciones.add("Paisaje natural sin retoques.");
-        alDescripciones.add("Perspectiva aérea.");
-        alDescripciones.add("Texturas y contrastes.");
-        alDescripciones.add("Composición minimalista.");
-        alDescripciones.add("Colores vivos y saturados.");
-        alDescripciones.add("Toma nocturna con larga exposición.");
-        alDescripciones.add("Detalle de la flora local.");
-        alDescripciones.add("Vista panorámica impresionante.");
-        alDescripciones.add("Escena capturada al amanecer.");
-        alDescripciones.add("Ambiente sereno y pacífico.");
-        alDescripciones.add("Rincones escondidos de la naturaleza.");
-        alDescripciones.add("Efecto de luz natural.");
-        alDescripciones.add("Contraste entre luz y sombra.");
+        alDescripciones.add("Una escena que transmite calma y armonía, invitando a detenerse un momento y disfrutar de la quietud.");
+        alDescripciones.add("Una composición llena de energía suave que combina simplicidad visual con una sensación de profundidad.");
+        alDescripciones.add("Un ambiente equilibrado donde luz y sombra se mezclan creando una atmósfera agradable y serena.");
+        alDescripciones.add("Gato curioso observando atentamente el exterior desde una ventana antigua, rodeado de luz suave y cálida.");
+        alDescripciones.add("Una imagen que sugiere movimiento tranquilo y un ritmo visual que fluye de manera natural y relajante.");
+        alDescripciones.add("Un conjunto de elementos organizados con delicadeza, inspirando una sensación de orden y claridad.");
+        alDescripciones.add("Una vista que evoca sentimientos de tranquilidad, con tonos suaves que aportan una presencia acogedora.");
+        alDescripciones.add("Una propuesta visual donde las formas se combinan con elegancia para generar una sensación de equilibrio.");
+        alDescripciones.add("Una escena envolvente que despierta curiosidad y transmite un ambiente cálido sin ser demasiado concreto.");
+        alDescripciones.add("Una composición que juega con texturas y contrastes, ofreciendo una sensación visual rica y sugerente.");
+        alDescripciones.add("Una imagen que invita a la introspección, equilibrando sutileza y profundidad en sus elementos.");
+        alDescripciones.add("Un conjunto visual armónico que genera serenidad y ofrece una percepción suave pero llena de intención.");
+        alDescripciones.add("Una presentación visual minimalista que consigue transmitir claridad sin perder interés ni matices.");
+        alDescripciones.add("Una escena con un ambiente acogedor que sugiere calma y estabilidad a través de su diseño equilibrado.");
+        alDescripciones.add("Una composición luminosa que mezcla suavidad y contraste para crear una sensación visual agradable.");
+        alDescripciones.add("Un diseño que transmite amplitud y ligereza, permitiendo que la mirada recorra el espacio con comodidad.");
 
-        // URLs de ejemplo 
         alUrls.add("https://cdn.pixabay.com/photo/2019/07/10/17/04/loves-4329036_1280.jpg");
         alUrls.add("https://cdn.pixabay.com/photo/2016/03/08/20/03/flag-1244648_1280.jpg");
         alUrls.add("https://cdn.pixabay.com/photo/2021/03/12/08/51/shorturl-6089108_1280.jpg");
@@ -96,62 +93,50 @@ public class SilvestreService {
         alUrls.add("https://cdn.pixabay.com/photo/2020/03/07/12/57/pier-4909703_1280.jpg");
         alUrls.add("https://cdn.pixabay.com/photo/2017/07/25/10/36/beauty-2537562_1280.jpg");
         alUrls.add("https://cdn.pixabay.com/photo/2019/01/16/17/26/beach-3936382_1280.jpg");
-
     }
 
-    public Long rellenaSilvestre(Long numItems) {
-        for (long i = 0; i < numItems; i++) {
-            SilvestreEntity o = new SilvestreEntity();
-            o.setTitulo(alTitulos.get(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alTitulos.size() - 1)));
+    // ---------------------------------------------------------------
+    // CRUD
+    // ---------------------------------------------------------------
 
-            // descripción obligatoria (ya no puede ser null)
-            o.setDescripcion(
-                alDescripciones.get(
-                    oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alDescripciones.size() - 1)
-                )
-            );
-
-            o.setUrlImagen(alUrls.get(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alUrls.size() - 1)));
-            o.setPublicado(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, 1) == 1);
-            o.setFechaCreacion(LocalDateTime.now());
-            o.setFechaModificacion(null);
-
-            oSilvestreRepository.save(o);
-        }
-        return oSilvestreRepository.count();
-    }
-
-    // ----------------------------CRUD---------------------------------
     public SilvestreEntity get(Long id) {
-        return oSilvestreRepository.findById(id).orElseThrow(() -> new RuntimeException("Silvestre not found"));
+        return oSilvestreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Silvestre not found"));
     }
 
-    public Long create(SilvestreEntity oSilvestreEntity) {
+    public Long create(SilvestreEntity oEntity) {
 
-        if (oSilvestreEntity.getDescripcion() == null || oSilvestreEntity.getDescripcion().isBlank()) {
+        // Validación simple
+        if (oEntity.getDescripcion() == null || oEntity.getDescripcion().isBlank()) {
             throw new RuntimeException("La descripción es obligatoria.");
         }
 
-        oSilvestreEntity.setFechaCreacion(LocalDateTime.now());
-        oSilvestreEntity.setFechaModificacion(null);
-
-        oSilvestreRepository.save(oSilvestreEntity);
-        return oSilvestreEntity.getId();
-    }
-
-    public Long update(SilvestreEntity oSilvestreEntity) {
-
-        if (oSilvestreEntity.getDescripcion() == null || oSilvestreEntity.getDescripcion().isBlank()) {
-            throw new RuntimeException("La descripción es obligatoria.");
+        // 🟢 DEFAULTS IMPORTANTES
+        if (oEntity.getPublicado() == null) {
+            oEntity.setPublicado(false);
         }
 
-        SilvestreEntity existing = oSilvestreRepository.findById(oSilvestreEntity.getId())
+        oEntity.setId(null); // Asegura autogenerado
+        oEntity.setFechaCreacion(LocalDateTime.now());
+        oEntity.setFechaModificacion(null);
+
+        oSilvestreRepository.save(oEntity);
+        return oEntity.getId();
+    }
+
+    public Long update(SilvestreEntity oEntity) {
+
+        SilvestreEntity existing = oSilvestreRepository.findById(oEntity.getId())
                 .orElseThrow(() -> new RuntimeException("Silvestre not found"));
 
-        existing.setTitulo(oSilvestreEntity.getTitulo());
-        existing.setDescripcion(oSilvestreEntity.getDescripcion());
-        existing.setUrlImagen(oSilvestreEntity.getUrlImagen());
-        existing.setPublicado(oSilvestreEntity.getPublicado());
+        if (oEntity.getDescripcion() == null || oEntity.getDescripcion().isBlank()) {
+            throw new RuntimeException("La descripción es obligatoria.");
+        }
+
+        existing.setTitulo(oEntity.getTitulo());
+        existing.setDescripcion(oEntity.getDescripcion());
+        existing.setUrlImagen(oEntity.getUrlImagen());
+        existing.setPublicado(oEntity.getPublicado() != null ? oEntity.getPublicado() : existing.getPublicado());
         existing.setFechaModificacion(LocalDateTime.now());
 
         oSilvestreRepository.save(existing);
@@ -163,11 +148,33 @@ public class SilvestreService {
         return id;
     }
 
-    public Page<SilvestreEntity> getPage(Pageable oPageable) {
-        return oSilvestreRepository.findAll(oPageable);
+    public Page<SilvestreEntity> getPage(Pageable pageable) {
+        return oSilvestreRepository.findAll(pageable);
     }
 
     public Long count() {
         return oSilvestreRepository.count();
     }
+
+    // ---------------------------------------------------------------
+    // FAKER
+    // ---------------------------------------------------------------
+
+    public Long rellenaSilvestre(Long numItems) {
+        for (long i = 0; i < numItems; i++) {
+            SilvestreEntity o = new SilvestreEntity();
+
+            o.setTitulo(alTitulos.get(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alTitulos.size() - 1)));
+            o.setDescripcion(alDescripciones.get(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alDescripciones.size() - 1)));
+            o.setUrlImagen(alUrls.get(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, alUrls.size() - 1)));
+            o.setPublicado(oAleatorioService.GenerarNumeroAleatorioEnteroEnRango(0, 1) == 1);
+
+            o.setFechaCreacion(LocalDateTime.now());
+            o.setFechaModificacion(null);
+
+            oSilvestreRepository.save(o);
+        }
+        return oSilvestreRepository.count();
+    }
 }
+
