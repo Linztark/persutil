@@ -100,7 +100,6 @@ public class BlogApi {
     @GetMapping("")
     public ResponseEntity<Page<BlogEntity>> getPage(Pageable oPageable) {
         return ResponseEntity.ok(oBlogService.getPage(oPageable));
-
     }
 
     @GetMapping("/count")

@@ -149,7 +149,12 @@ public class BlogService {
     }
 
     public Page<BlogEntity> getPage(Pageable oPageable) {
-        return oBlogRepository.findAll(oPageable);
+        // si no hay session activa, solo devolver los publicados
+        if (!oSessionService.isSessionActive()) {
+            return oBlogRepository.findByPublicadoTrue(oPageable);            
+        } else {
+            return oBlogRepository.findAll(oPageable);
+        }
     }
 
     public Long count() {
